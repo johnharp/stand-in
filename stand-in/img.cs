@@ -7,6 +7,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace stand_in
 {
@@ -29,7 +31,19 @@ namespace stand_in
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
                 : $"Hello, {name}. This HTTP triggered function executed successfully.";
 
-            return new OkObjectResult(responseMessage);
+
+
+            byte[] bytes = new byte[0];
+
+            using (var ms = new MemoryStream())
+            {
+                using Image<Rgba32> png = new Image<Rgba32>(200, 200, Color.MediumSpringGreen);
+                png.SaveAsPng(ms);
+
+                bytes = ms.ToArray();
+            }
+
+            return new FileContentResult(bytes, "image/png");
         }
     }
 }

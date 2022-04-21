@@ -21,29 +21,28 @@ namespace stand_in
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            string d = req.Query["d"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            d = d ?? data?.d;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            byte[] specBytes = System.Convert.FromBase64String(d);
+            byte[] imageBytes = new byte[0];
 
-
-
-            byte[] bytes = new byte[0];
+            var imageSpec = new ImageSpec(specBytes);
 
             using (var ms = new MemoryStream())
             {
-                using Image<Rgba32> png = new Image<Rgba32>(200, 200, Color.MediumSpringGreen);
+                using Image<Rgba32> png = new Image<Rgba32>(
+                    imageSpec.Width, imageSpec.Height,
+                    imageSpec.BackgroundColor);
                 png.SaveAsPng(ms);
 
-                bytes = ms.ToArray();
+                imageBytes = ms.ToArray();
             }
 
-            return new FileContentResult(bytes, "image/png");
+            return new FileContentResult(imageBytes, "image/png");
         }
     }
 }

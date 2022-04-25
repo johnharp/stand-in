@@ -16,16 +16,12 @@ namespace stand_in
     {
         [FunctionName("img")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string d = req.Query["d"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            d = d ?? data?.d;
 
             byte[] specBytes = System.Convert.FromBase64String(d);
             byte[] imageBytes = new byte[0];

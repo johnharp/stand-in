@@ -33,9 +33,13 @@ namespace stand_in
                 using Image<Rgba32> png = new Image<Rgba32>(
                     imageSpec.Width, imageSpec.Height,
                     imageSpec.BackgroundColor);
+
+
                 png.SaveAsPng(ms);
 
                 imageBytes = ms.ToArray();
+
+                log.LogInformation("TilesPerRow: " + imageSpec.TilesPerRow);
             }
 
             return new FileContentResult(imageBytes, "image/png");

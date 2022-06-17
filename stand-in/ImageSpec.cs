@@ -23,7 +23,15 @@ namespace stand_in
 
             int p = 0;
 
-            Width = 256*specBytes[p++] + specBytes[p++];
+            // WWHHBBBFFFNDDDD...
+            // W = Width (2 bytes)
+            // H = Height (2 bytes)
+            // B = Background Color R, G, B (3 bytes)
+            // F = Foreground Color R, G, B (3 bytes)
+            // N = Num tiles per row (1 byte)
+            // D = Data (n bytes)
+
+            Width = 256 * specBytes[p++] + specBytes[p++];
             Height = 256 * specBytes[p++] + specBytes[p++];
 
             var rgb24 = new Rgb24(specBytes[p++], specBytes[p++], specBytes[p++]);

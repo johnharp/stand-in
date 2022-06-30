@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -16,6 +17,8 @@ namespace stand_in
 
         // Number of tiles in the image per row
         public int TilesPerRow { get; set; }
+
+        public int NumRows { get; set; }
 
         public ImageSpec(byte[] specBytes)
         {
@@ -41,6 +44,20 @@ namespace stand_in
             ForegroundColor = new Color(rgb24);
 
             TilesPerRow = specBytes[p++];
+
+            int numBytesData = specBytes.Length - p;
+            int numBitsData = (specBytes.Length - p)*8;
+
+            if (numBitsData < 0 ||
+                numBitsData < TilesPerRow ||
+                numBitsData % TilesPerRow != 0)
+            {
+                throw new FormatException("Number of data bits must be a multiple of TilesPerRow");
+            }
+
+            NumRows = numBitsData / TilesPerRow;
+
+            
         }
 
         private void ValidateSpecBytes(byte[] bytes)

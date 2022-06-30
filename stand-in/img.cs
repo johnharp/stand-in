@@ -12,6 +12,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace stand_in
 {
+    // http://localhost:7071/api/img?d=AyACWNzr9zB1tRAAAGAGcD44fBzoCcgDiAeoDkgc6Dl4MDg//HAOYAYAAA==
     public static class img
     {
         [FunctionName("img")]
@@ -27,6 +28,7 @@ namespace stand_in
             byte[] imageBytes = new byte[0];
 
             var imageSpec = new ImageSpec(specBytes);
+            log.LogInformation($"TilesPerRow: {imageSpec.TilesPerRow}, NumRows: {imageSpec.NumRows}");
 
             using (var ms = new MemoryStream())
             {
@@ -34,12 +36,17 @@ namespace stand_in
                     imageSpec.Width, imageSpec.Height,
                     imageSpec.BackgroundColor);
 
+                for (int col = 0; col < imageSpec.TilesPerRow; col++)
+                {
+                    for (int row = 0; row < imageSpec.NumRows; row++)
+                    {
+
+                    }
+                }
 
                 png.SaveAsPng(ms);
 
                 imageBytes = ms.ToArray();
-
-                log.LogInformation("TilesPerRow: " + imageSpec.TilesPerRow);
             }
 
             return new FileContentResult(imageBytes, "image/png");

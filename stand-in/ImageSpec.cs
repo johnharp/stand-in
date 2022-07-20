@@ -3,6 +3,13 @@ using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
+
+// Test data
+//
+// AyACWNzr9zB1tRAQAABgBnA+OHwc6AnIA4gHqA5IHOg5eDA4P/xwDmAGAAA=															
+//
+
+
 namespace stand_in
 {
     public class ImageSpec
@@ -15,9 +22,7 @@ namespace stand_in
         public Color BackgroundColor { get; set; }
         public Color ForegroundColor { get; set; }
 
-        // Number of tiles in the image per row
-        public int TilesPerRow { get; set; }
-
+        public int NumCols { get; set; }
         public int NumRows { get; set; }
 
         public ImageSpec(byte[] specBytes)
@@ -26,12 +31,13 @@ namespace stand_in
 
             int p = 0;
 
-            // WWHHBBBFFFNDDDD...
+            // WWHHBBBFFFCR[DDDD...]
             // W = Width (2 bytes)
             // H = Height (2 bytes)
             // B = Background Color R, G, B (3 bytes)
             // F = Foreground Color R, G, B (3 bytes)
-            // N = Num tiles per row (1 byte)
+            // C = Num colums of tiles (1 byte)
+            // R = Num rows of tiles (1 byte)
             // D = Data (n bytes)
 
             Width = 256 * specBytes[p++] + specBytes[p++];
@@ -43,19 +49,18 @@ namespace stand_in
             rgb24 = new Rgb24(specBytes[p++], specBytes[p++], specBytes[p++]);
             ForegroundColor = new Color(rgb24);
 
-            TilesPerRow = specBytes[p++];
+            NumCols = specBytes[p++];
+            NumRows = specBytes[p++];
 
             int numBytesData = specBytes.Length - p;
             int numBitsData = (specBytes.Length - p)*8;
 
             if (numBitsData < 0 ||
-                numBitsData < TilesPerRow ||
-                numBitsData % TilesPerRow != 0)
+                numBitsData < NumCols * NumRows)
             {
-                throw new FormatException("Number of data bits must be a multiple of TilesPerRow");
+                throw new FormatException("Not enough data bits supplied");
             }
 
-            NumRows = numBitsData / TilesPerRow;
 
             
         }

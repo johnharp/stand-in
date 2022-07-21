@@ -12,7 +12,12 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace stand_in
 {
-    // http://localhost:7071/api/img?d=AyACWNzr9zB1tRAQAABgBnA+OHwc6AnIA4gHqA5IHOg5eDA4P/xwDmAGAAA=
+    // Test data:
+    // http://localhost:7071/api/img?d=AyACWNzr9zB1tRAQAABgBnA%2BOHwc6AnIA4gHqA5IHOg5eDA4P%2FxwDmAGAAA%3D
+    //
+
+
+
     public static class img
     {
         [FunctionName("img")]
@@ -28,6 +33,7 @@ namespace stand_in
             byte[] imageBytes = new byte[0];
 
             var imageSpec = new ImageSpec(specBytes);
+            log.LogInformation($"Width: {imageSpec.Width} px, Height: {imageSpec.Height} px");
             log.LogInformation($"TilesPerRow: {imageSpec.NumCols}, NumRows: {imageSpec.NumRows}");
 
             using (var ms = new MemoryStream())
@@ -40,7 +46,7 @@ namespace stand_in
                 {
                     for (int row = 0; row < imageSpec.NumRows; row++)
                     {
-
+                        bool pixel = imageSpec.
                     }
                 }
 

@@ -42,11 +42,11 @@ namespace stand_in
                     imageSpec.Width, imageSpec.Height,
                     imageSpec.BackgroundColor);
 
-                for (int col = 0; col < imageSpec.NumCols; col++)
+                for (int row = 0; row < imageSpec.NumRows; row++)
                 {
-                    for (int row = 0; row < imageSpec.NumRows; row++)
+                    for (int col = 0; col < imageSpec.NumCols; col++)
                     {
-                        bool pixel = imageSpec.
+                        bool bit = imageSpec.ImageBits[imageSpec.NumCols * row + col];
                     }
                 }
 

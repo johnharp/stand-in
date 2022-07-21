@@ -26,7 +26,7 @@ namespace stand_in
         public int NumCols { get; set; }
         public int NumRows { get; set; }
 
-        public static BitArray ImageBits { get; set; }
+        public BitArray ImageBits { get; set; }
 
         public ImageSpec(byte[] specBytes)
         {
@@ -66,7 +66,7 @@ namespace stand_in
 
             Byte[] b = new Byte[numBytesData];
             Array.Copy(specBytes, p, b, 0, numBytesData);
-            ImageSpec.ImageBits = new BitArray(b);
+            ImageBits = new BitArray(b);
 
         }
 
